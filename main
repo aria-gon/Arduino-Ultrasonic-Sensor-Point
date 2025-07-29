@@ -1,0 +1,74 @@
+#include <SR04.h>
+#include <Servo.h>
+#define trig 12
+#define echo 11
+#define button 8
+#define INB 6
+#define INA 5
+SR04 sr04 = SR04(echo,trig);
+long duration, distance, TargetAngle;
+int pos = 0;
+long ClosestTarget = 10000;
+Servo servo1;
+Servo servo2;
+int MotorSpeed = 100;
+
+
+void setup()
+{
+  Serial.begin(9600);
+  servo1.attach(9);
+  servo2.attach(10);
+  pinMode(trig, OUTPUT);
+  pinMode(echo, INPUT);
+  pinMode(button, INPUT);
+  pinMode(INB, OUTPUT);
+  pinMode(INA, OUTPUT);
+}
+
+void loop() {
+
+  if(digitalRead(button) == LOW) { // look around for the closest object
+   for (pos = 0; pos <= 180; pos += 3) 
+   {
+    digitalWrite(INA, LOW);
+    digitalWrite(INB, LOW);
+    servo1.write(pos);
+    digitalWrite(trig, LOW);
+    delayMicroseconds(2);
+  
+    digitalWrite(trig, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(trig, LOW);
+    duration = pulseIn(echo, HIGH);
+    distance=sr04.Distance();
+
+     if (distance < ClosestTarget)
+     {
+      ClosestTarget = distance;
+      TargetAngle = pos;
+     }
+  }
+
+    distance=sr04.Distance();
+    Serial.print("Closest Target = ");
+    Serial.print(ClosestTarget);
+    Serial.println(" ");
+    Serial.print("Target Angle = ");
+    Serial.print(TargetAngle);
+    Serial.println(" ");
+
+
+    servo2.write(TargetAngle);
+    delay(100);
+    servo1.write(TargetAngle); // look towards the closest object
+    analogWrite(INA, MotorSpeed); // go towards the closest object
+    digitalWrite(INB, LOW);
+    delay(15000); // go towards the closest object for 15 seconds
+
+    analogWrite(INA, 0);
+    digitalWrite(INB, LOW);
+
+  }
+
+    }
