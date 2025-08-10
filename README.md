@@ -7,6 +7,11 @@ Hardware:
 - Breadboard
 - Arduino
 
+
+
+
+
+
 <img width="963" height="753" alt="image" src="https://github.com/user-attachments/assets/6f86748d-c0ab-4f2c-aaf9-cdd4605205d1" />
 
 - Ultrasonic Sensor Trig - 12
