@@ -1,5 +1,8 @@
 # Arduino-Closest-Object-Project
 
+An arduino project where an ultrasonic sensor mounted on a servo will locate the closest object
+
+
 Hardware:
 - Ultrasonic Sensor
 - Mini 9g Servo
